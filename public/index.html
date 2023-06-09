@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>Contact Manager</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="javascripts/jquery.js"></script>
+    <link rel="stylesheet" href="jquery-ui.min.css">
+    <script src="external/jquery/jquery.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="javascripts/handlebars.js"></script>
+    <script src="javascripts/application.js"></script>
+    <script src="https://kit.fontawesome.com/2916bb2ee7.js" crossorigin="anonymous"></script>
+    <script id="contactTmpl" type="text/x-handlebars">
+      {{#each contacts}}
+        <div class="contact" data-id="{{id}}">
+          <h3 class="name_media">{{full_name}}</h3>
+          <dl>
+            <dt>Phone Number:</dt>
+            <dd class="phone_media">{{phone_number}}</dd>
+            <dt>Email:</dt>
+            <dd class="email_media">{{email}}</dd>
+            <dt>Tags:</dt>
+            <dd class="tags_media">{{{tags}}}</dd>
+          </dl>
+          <button class="edit-btn contact-btn fa-solid fa-pencil">
+            <span class="contact-btn-text">Edit</span>
+          </button>
+          <button class="delete-btn contact-btn fa-solid fa-trash-can">
+            <span class="contact-btn-text">Delete</span>
+          </button>
+        </div>
+      {{/each}}
+    </script>
+    <script id="contactFormTmpl" type="text/x-handlebars">
+      <h2>{{title}}</h2>
+      <form class="contact-form" data-operation={{operation}} novalidate>
+        <input class="contact-id" name="id" value hidden>
+        <div class="form-group form-group-name">
+          <div class="form-fields">
+            <label>Full name:</label>
+            <div class="form-input">
+              <input class="form-control" name="full_name" type="text" required>
+            </div>
+          </div>
+          <p class="invalid">Please enter a name.</p>
+        </div>
+        <div class="form-group form-group-email">
+          <div class="form-fields">
+            <label>Email address:</label>
+            <div class="form-input">
+              <input class="form-control" name="email" type="text" pattern=".+@.+" required>
+            </div>
+          </div>
+          <p class="invalid">Please enter a valid email. E.g. name@example.com</p>
+        </div>
+        <div class="form-group form-group-phone">
+          <div class="form-fields">
+          <label>Telephone number:</label>
+            <div class="form-input">
+              <input class="form-control" name="phone_number" type="text" pattern="[\d+(-|.|_)]+" required>
+            </div>
+          </div>
+          <p class="invalid">Please enter a valid phone number. Numbers optionally separated by (. _ -).</p>
+        </div>
+         <div class="form-group form-group-tags">
+          <div class="form-fields">
+            <label>Tags:</label>
+            <div class="form-input">
+              <input class="form-control" name="tags" type="text" maxlength="27">
+            </div>
+          </div>
+          <p class="invalid">Please enter no more than 27 characters.</p>
+        </div>
+        <div class="form-group create-btns-container">
+          <div class="form-fields">
+            <div class="btn-container form-offset">
+              <button class="submit-contact-btn btn-create">Submit</button>
+            </div>
+            <div class="btn-container">
+              <button class="cancel-btn btn-create">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="title-content">
+        <h1>Contact Manager</h1>
+        <p>Using jQuery UI, Handlebars, MVC Pattern</p>
+      </div>
+    </header>
+    <main>
+      <div class="main-container">
+        
+        <div class="contacts-container">
+          <div class="add-search-container content-container">
+            <div class="add-container">
+              <button class="add-contact">Add Contact</button>
+            </div>
+            <div class="search-container">
+              <input class="search-input form-control" type="text" placeholder="Search...">
+            </div>
+          </div>
+
+          <div class="contact-list"></div>
+
+          <div class="empty-contact-list content-container">
+            <h3>There are no contacts.</h3>
+            <div class="add-container">
+              <button class="add-contact">Add Contact</button>
+            </div>         
+          </div>
+        </div>
+
+        <div class="contact-form-container" hidden></div>
+      </div>  
+    </main>
+  </body>
+</html>
+
