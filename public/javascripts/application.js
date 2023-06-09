@@ -116,7 +116,7 @@ class ContactView {
 
     this.bindEvents();
   }
-  
+
   // Setup methods
   setController(controller) {
     this.controller = controller;
@@ -276,32 +276,17 @@ class ContactController {
   }
 
   handleContactFormCreate(formData) {
-    const contactData = {
-      full_name: formData.get('full_name'),
-      email: formData.get('email'),
-      phone_number: formData.get('phone_number'),
-      tags: formData.get('tags')
-    }; 
-
+    const contactData = this.parseFormData(formData);
     const contact = new Contact(contactData);
     let response = this.model.addContact(contact);
-    this.view.toggleContactFormContainer();
-    this.getContacts();
+    this.finishFormOperation();
   }
 
   handleContactFormEdit(formData) {
-    const contactData = {
-      id: +formData.get('id'),
-      full_name: formData.get('full_name'),
-      email: formData.get('email'),
-      phone_number: formData.get('phone_number'),
-      tags: formData.get('tags')
-    };
-
+    const contactData = this.parseFormData(formData);
     const contact = new Contact(contactData);
     this.model.editContact(contact);
-    this.view.showHideContactForm('hide');
-    this.getContacts();
+    this.finishFormOperation();
   }
 
   handleDeleteContact(contactId) {
@@ -312,6 +297,21 @@ class ContactController {
   handleBadRequest(response) {
     const errorMessage = `${response.status}: ${response.statusText}`;
     this.view.displayError(errorMessage)
+  }
+
+  parseFormData(formData) {
+    const contactData = {
+      id: +formData.get('id'),
+      full_name: formData.get('full_name'),
+      email: formData.get('email'),
+      phone_number: formData.get('phone_number'),
+      tags: formData.get('tags')
+    };
+    
+    // Remove id if adding a new contact
+    if (contactData.id === 0) delete contactData.id;
+
+    return contactData;
   }
 
   async getContacts() {
@@ -326,6 +326,11 @@ class ContactController {
   async getContact(contactId) {
     let contactJson = await this.model.getContact(contactId);
     return new Contact(contactJson);
+  }
+
+  finishFormOperation() {
+    this.view.toggleContactFormContainer();
+    this.getContacts();
   }
 
   filterContacts(searchTerm) {
